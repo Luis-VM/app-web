@@ -3,11 +3,10 @@ export default function Values() {
     <section id="valores">
       <h2>Valores</h2>
       <ul>
-        <li>Integridad</li>
-        <li>Compromiso</li>
+        <li>Honestidad</li>
         <li>Responsabilidad</li>
-        <li>Transparencia</li>
-        <li>Excelencia</li>
+        <li>Integridad</li>
+        <li>Eficiencia</li>
       </ul>
     </section>
   );

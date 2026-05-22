@@ -3,10 +3,37 @@ import { useState } from "react";
 
 export default function Contact() {
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSent(true);
+    setLoading(true);
+    setError("");
+
+    const form = e.currentTarget;
+    const data = {
+      nombre:   (form.elements.namedItem("nombre")   as HTMLInputElement).value,
+      empresa:  (form.elements.namedItem("empresa")  as HTMLInputElement).value,
+      email:    (form.elements.namedItem("email")    as HTMLInputElement).value,
+      servicio: (form.elements.namedItem("servicio") as HTMLSelectElement).value,
+      mensaje:  (form.elements.namedItem("mensaje")  as HTMLTextAreaElement).value,
+    };
+
+    try {
+      const res = await fetch("/api/contacto", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) throw new Error("Error al enviar");
+      setSent(true);
+    } catch {
+      setError("Hubo un problema al enviar tu mensaje. Inténtalo de nuevo.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -57,20 +84,20 @@ export default function Contact() {
                 <div className="form-row">
                   <div className="form-group">
                     <label htmlFor="nombre">Nombre</label>
-                    <input id="nombre" type="text" placeholder="Tu nombre" required />
+                    <input id="nombre" name="nombre" type="text" placeholder="Tu nombre" required />
                   </div>
                   <div className="form-group">
                     <label htmlFor="empresa">Empresa</label>
-                    <input id="empresa" type="text" placeholder="Tu empresa" />
+                    <input id="empresa" name="empresa" type="text" placeholder="Tu empresa" />
                   </div>
                 </div>
                 <div className="form-group">
                   <label htmlFor="email">Email</label>
-                  <input id="email" type="email" placeholder="tu@email.com" required />
+                  <input id="email" name="email" type="email" placeholder="tu@email.com" required />
                 </div>
                 <div className="form-group">
                   <label htmlFor="servicio">Servicio de interés</label>
-                  <select id="servicio" defaultValue="">
+                  <select id="servicio" name="servicio" defaultValue="">
                     <option value="" disabled>Selecciona un servicio</option>
                     <option>Despacho Aduanero</option>
                     <option>Búsqueda de Proveedores</option>
@@ -82,10 +109,20 @@ export default function Contact() {
                 </div>
                 <div className="form-group">
                   <label htmlFor="mensaje">Mensaje</label>
-                  <textarea id="mensaje" placeholder="Cuéntanos sobre tu proyecto o consulta..." required />
+                  <textarea id="mensaje" name="mensaje" placeholder="Cuéntanos sobre tu proyecto o consulta..." required />
                 </div>
-                <button type="submit" className="btn-primary" style={{ width: "100%", border: "none" }}>
-                  Enviar Mensaje
+
+                {error && (
+                  <p style={{ color: "#f87171", fontSize: "0.85rem" }}>{error}</p>
+                )}
+
+                <button
+                  type="submit"
+                  className="btn-primary"
+                  style={{ width: "100%", border: "none", opacity: loading ? 0.6 : 1 }}
+                  disabled={loading}
+                >
+                  {loading ? "Enviando..." : "Enviar Mensaje"}
                 </button>
               </form>
             )}

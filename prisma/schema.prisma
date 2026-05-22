@@ -18,3 +18,12 @@ model Contacto {
   mensaje   String
   creadoEn  DateTime @default(now())
 }
+
+model Lead {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  ciudad    String
+  telefono  String
+  email     String
+  creadoEn  DateTime @default(now())
+}

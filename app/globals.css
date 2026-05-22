@@ -626,7 +626,7 @@ nav a:hover::after { width: 100%; }
   font-weight: 300;
   transition: border-color 0.2s ease;
   outline: none;
-  -webkit-appearance: none;
+  -webkit-appearance: none; 
 }
 
 .form-group input:focus,

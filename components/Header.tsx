@@ -15,7 +15,10 @@ export default function Header() {
             alt="BIRLCOMEX SRL"
             width={44}
             height={44}
-            style={{ objectFit: "contain" }}
+            style={{
+              objectFit: "contain", 
+              height: "auto"
+              }}
           />
           <div className="nav-logo-text">
             <span className="nav-logo-name">BIRLCOMEX</span>
